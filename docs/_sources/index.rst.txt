@@ -1,0 +1,48 @@
+.. Allele Expression Consolidator documentation master file, created by
+   sphinx-quickstart on Thu Jun 22 16:57:05 2023.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to Allele Expression Consolidator's documentation!
+==========================================================
+
+This software contains the implementation of the allele_consolidator script,
+which takes the output of the BLASTN command and consolidates the expression
+of alleles for the same gene.
+
+Reference Paper:
+----------------
+López-Rozo, N.; Ramirez-Castrillon, M.; Romero, M.; Finke, J.; Rocha, C.
+*Gene Expression Datasets for Two Versions of the Saccharum spontaneum AP85-441 Genome*.
+Data 2023, 8, 1. https://doi.org/10.3390/data8010001
+
+
+Usage example:
+--------------
+The module *test.py* is available for showing the main functionalities of the
+alleleconsolidator module. To run it, use:
+
+..  code-block:: bash
+   :linenos:
+
+   python3 test.py
+
+It will compute the routines and generate plots for the example dataset, which
+is a subset of the data used in the reference paper.
+
+.. image:: ../data/graph.png
+  :width: 400
+  :alt: Multigraph for the example dataset
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   modules
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

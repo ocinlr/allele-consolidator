@@ -1,0 +1,21 @@
+alleleconsolidator
+==================
+This software contains the implementation of the allele_consolidator script,
+which takes the output of the BLASTN command and consolidates the expression
+of alleles for the same gene.
+
+Reference Paper:
+----------------
+López-Rozo, N.; Ramirez-Castrillon, M.; Romero, M.; Finke, J.; Rocha, C.
+*Gene Expression Datasets for Two Versions of the Saccharum spontaneum AP85-441 Genome*.
+Data 2023, 8, 1. https://doi.org/10.3390/data8010001
+
+.. image:: ../data/graph.png
+  :width: 400
+  :alt: Multigraph for the example dataset
+
+.. toctree::
+   :maxdepth: 4
+
+   alleleconsolidator
+   test

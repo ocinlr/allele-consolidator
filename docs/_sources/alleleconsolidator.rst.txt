@@ -1,0 +1,7 @@
+alleleconsolidator module
+=========================
+
+.. automodule:: alleleconsolidator
+   :members:
+   :undoc-members:
+   :show-inheritance:

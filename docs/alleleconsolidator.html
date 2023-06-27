@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>alleleconsolidator module &mdash; Allele Expression Consolidator 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="test module" href="test.html" />
+    <link rel="prev" title="alleleconsolidator" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Allele Expression Consolidator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">alleleconsolidator</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">alleleconsolidator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#algorithmic-description">Algorithmic description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-reference"><strong>API Reference</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alleleconsolidator.allele_transform"><code class="docutils literal notranslate"><span class="pre">allele_transform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alleleconsolidator.create_bipartite_graph"><code class="docutils literal notranslate"><span class="pre">create_bipartite_graph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alleleconsolidator.draw_multigraph"><code class="docutils literal notranslate"><span class="pre">draw_multigraph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alleleconsolidator.read_expression"><code class="docutils literal notranslate"><span class="pre">read_expression()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="test.html">test module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Allele Expression Consolidator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">alleleconsolidator</a></li>
+      <li class="breadcrumb-item active">alleleconsolidator module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/alleleconsolidator.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-alleleconsolidator">
+<span id="alleleconsolidator-module"></span><h1>alleleconsolidator module<a class="headerlink" href="#module-alleleconsolidator" title="Permalink to this heading"></a></h1>
+<section id="algorithmic-description">
+<h2>Algorithmic description<a class="headerlink" href="#algorithmic-description" title="Permalink to this heading"></a></h2>
+<p>The procedure is explained in detail on the following paper, whose datasets can
+be found in the corresponding repository:</p>
+<p>López-Rozo, N.; Ramirez-Castrillon, M.; Romero, M.; Finke, J.; Rocha, C.
+<em>Gene Expression Datasets for Two Versions of the Saccharum spontaneum AP85-441 Genome</em>.
+Data 2023, 8, 1. <a class="reference external" href="https://doi.org/10.3390/data8010001">https://doi.org/10.3390/data8010001</a></p>
+<p>Based on the output of BLASTN, the associations among the alleles in v2018 and
+v2019 are found to have repetitions. In the case of the mappings between v2018
+to v2019, a CDS in the source could be associated with several CDS in the
+target. To generate a reasonable coverage, both mappings are combined by
+modeling the problem as a graph flow optimization problem [20] with multiple
+sources (v2018 alleles) and multiple targets (v2019 alleles).</p>
+<p>A min-cost max-flow problem requires to compute a graph-matching (i.e., match
+at the level of nodes/vertices) with maximal cardinality (i.e., maximal number
+of connections), thus ensuring a maximal covering of the source-target
+associations. If more than one maximal matching is possible, then the cost of
+producing that maximal flow is to be minimized. In this case, identity scores
+can be considered to identify the matching with the greatest sum of identity
+scores, while still ensuring that a v2018 allele expression is used at most
+once. Since the algorithm implemented in networkx minimizes cost, the
+artificial cost fed to the min-cost max-flow algorithm is <em>pident</em> (i.e.,
+percent identity) on each possible association between the two versions of the
+alleles.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+<section id="api-reference">
+<h2><strong>API Reference</strong><a class="headerlink" href="#api-reference" title="Permalink to this heading"></a></h2>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="alleleconsolidator.allele_transform">
+<span class="sig-prename descclassname"><span class="pre">alleleconsolidator.</span></span><span class="sig-name descname"><span class="pre">allele_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapping_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mapping_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expression_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expression_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'expression2.csv'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix_restricted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'restricted'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blastn_titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qseqid,sseqid,pident,length,mismatch,gapopen,qstart,qend,sstart,send,evalue,bitscore'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right_subset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qseqid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/alleleconsolidator.html#allele_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#alleleconsolidator.allele_transform" title="Permalink to this definition"></a></dt>
+<dd><p>This function transforms the expression values of the alleles in v2018 to
+the alleles in v2019. The transformation is done by solving a min-cost
+max-flow problem with multiple sources (v2018 alleles) and multiple targets
+(v2019 alleles).</p>
+<p>Keep in mind that the function stores additional files in the result folder:</p>
+<ul class="simple">
+<li><p><em>expression_2</em>: The mapped expression file for v2019, as CSV format.</p></li>
+<li><p><em>prefix_restricted.pk</em>: The gene assignment, as a dictionary.</p></li>
+<li><p><em>prefix_restricted.txt</em>: The gene assignment, as a table.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mapping_1</strong> (<em>str</em>) – The path to the mapping file from v2018 to v2019.</p></li>
+<li><p><strong>mapping_2</strong> (<em>str</em>) – The path to the mapping file from v2019 to v2018.</p></li>
+<li><p><strong>expression_1</strong> (<em>str</em>) – The path to the expression file of v2018.</p></li>
+<li><p><strong>result_folder</strong> (<em>str</em>) – The path to the folder where the results will be saved.</p></li>
+<li><p><strong>expression_2</strong> (<em>str</em>) – The name of the expression file of v2019.</p></li>
+<li><p><strong>prefix_restricted</strong> (<em>str</em>) – The prefix of the restricted alleles.</p></li>
+<li><p><strong>blastn_titles</strong> (<em>str</em>) – The titles of the BLASTN output.</p></li>
+<li><p><strong>right_subset</strong> (<em>str</em>) – The subset identifier of the left nodes of the bipartite graph.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – If set to True, the function prints the time at the beginning     and the end of the execution.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return bipartite<span class="colon">:</span></dt>
+<dd class="field-even"><p>The bipartite graph used for computing the min-cost max-flow.</p>
+</dd>
+<dt class="field-odd">Rtype bipartite<span class="colon">:</span></dt>
+<dd class="field-odd"><p>networkx.Graph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="alleleconsolidator.create_bipartite_graph">
+<span class="sig-prename descclassname"><span class="pre">alleleconsolidator.</span></span><span class="sig-name descname"><span class="pre">create_bipartite_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'qseqid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sseqid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pident'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/alleleconsolidator.html#create_bipartite_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#alleleconsolidator.create_bipartite_graph" title="Permalink to this definition"></a></dt>
+<dd><p>This function creates a bipartite graph from the mapping dataframe, which was
+extracted from the BLASTN output. <strong>Note</strong>: The weight of the edges is
+multiplied by -1000 and truncated to be used as a cost in the min-cost
+max-flow algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df_map</strong> (<em>pandas.DataFrame</em>) – The mapping dataframe.</p></li>
+<li><p><strong>query_col</strong> (<em>str</em>) – The name of the column containing the query sequences.</p></li>
+<li><p><strong>subject_col</strong> (<em>str</em>) – The name of the column containing the subject sequences.</p></li>
+<li><p><strong>weight_col</strong> (<em>str</em>) – The name of the column containing the weight of the edges.</p></li>
+<li><p><strong>base_graph</strong> (<em>networkx.Graph</em>) – The base graph to be used. if set to None (default), a new     graph is created.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return bipartite<span class="colon">:</span></dt>
+<dd class="field-even"><p>The bipartite graph.</p>
+</dd>
+<dt class="field-odd">Rtype bipartite<span class="colon">:</span></dt>
+<dd class="field-odd"><p>networkx.Graph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="alleleconsolidator.draw_multigraph">
+<span class="sig-prename descclassname"><span class="pre">alleleconsolidator.</span></span><span class="sig-name descname"><span class="pre">draw_multigraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subset_feat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subset_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('green',</span> <span class="pre">'blue',</span> <span class="pre">'purple',</span> <span class="pre">'red',</span> <span class="pre">'orange',</span> <span class="pre">'yellow')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savefig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'graph.pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/alleleconsolidator.html#draw_multigraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#alleleconsolidator.draw_multigraph" title="Permalink to this definition"></a></dt>
+<dd><p>This function draws a multipartite graph. <strong>Note</strong>: The graph is drawn in
+the order of the subsets in the list of subset features. The nodes are</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph</strong> (<em>networkx.Graph</em>) – The graph to be drawn.</p></li>
+<li><p><strong>subset_feat</strong> – The subset feature names. The order of the names is the order     the subsets will be drawn.</p></li>
+<li><p><strong>x_offset</strong> (<em>int</em>) – The x offset for the subsets and the drawn nodes.</p></li>
+<li><p><strong>y_offset</strong> (<em>int</em>) – The y offset for the subsets and the drawn nodes.</p></li>
+<li><p><strong>subset_color</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – The colors of the subsets.</p></li>
+<li><p><strong>savefig</strong> (<em>bool</em>) – Whether to save the figure or not.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the file to save the figure.</p></li>
+<li><p><strong>node_size</strong> (<em>int</em>) – The size of the nodes.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="alleleconsolidator.read_expression">
+<span class="sig-prename descclassname"><span class="pre">alleleconsolidator.</span></span><span class="sig-name descname"><span class="pre">read_expression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/alleleconsolidator.html#read_expression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#alleleconsolidator.read_expression" title="Permalink to this definition"></a></dt>
+<dd><p>This function reads the expression file and returns a list of names and a
+matrix of expression values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>str</em>) – The path to the expression file.</p></li>
+<li><p><strong>sep</strong> (<em>str</em>) – The separator used in the file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return names<span class="colon">:</span></dt>
+<dd class="field-even"><p>The list of names.</p>
+</dd>
+<dt class="field-odd">Rtype names<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+<dt class="field-even">Return mat<span class="colon">:</span></dt>
+<dd class="field-even"><p>The matrix of expression values.</p>
+</dd>
+<dt class="field-odd">Rtype mat<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[numpy.array]</p>
+</dd>
+<dt class="field-even">Return headers<span class="colon">:</span></dt>
+<dd class="field-even"><p>The headers of the table (“gene”/”allele” + accession names).</p>
+</dd>
+<dt class="field-odd">Rtype headers<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="alleleconsolidator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="test.html" class="btn btn-neutral float-right" title="test module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Nicolás López, Jorge Finke, and Camilo Rocha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
