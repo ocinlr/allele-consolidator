@@ -78,5 +78,5 @@ to execute your code, for easy access.
 ## API Reference
 
 The reference can be found online 
-[here](https://ocinlr.github.io/alleleconsolidator/) or as 
+[here](https://ocinlr.github.io/allele-consolidator/) or as 
 a pdf [here](docs/alleleconsolidator.pdf).
