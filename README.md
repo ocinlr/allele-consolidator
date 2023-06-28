@@ -79,4 +79,4 @@ to execute your code, for easy access.
 
 The reference can be found online 
 [here](https://ocinlr.github.io/allele-consolidator/) or as 
-a pdf [here](docs/alleleconsolidator.pdf).
+a pdf [here](docs/alleleexpressionconsolidator.pdf).
